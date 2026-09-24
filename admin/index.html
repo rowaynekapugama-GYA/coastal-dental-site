@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Site Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#3d4b4d;--primary-dark:#2a3537;--primary-light:#6a8082;--secondary:#e8e3da;
+  --off:#f8f7f5;--muted:#5e6b6b;--mint:#deeae8;--accent:#3d7a78;--line:#e3ddd2;
+  --danger:#b3452f;--ok:#2f7a55;--white:#fff;--r:12px;--r2:18px;
+  --ease:cubic-bezier(.22,.8,.26,1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Manrope,system-ui,sans-serif;color:var(--primary);background:var(--off);font-size:14px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit}
+.hidden{display:none!important}
+
+/* ---------- buttons & fields ---------- */
+.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:100px;font-weight:700;font-size:13px;letter-spacing:.01em;transition:all .2s var(--ease);white-space:nowrap}
+.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn-primary{background:var(--primary-dark);color:#fff}
+.btn-primary:hover{background:#1c2426}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-ghost{border:1.5px solid var(--line);background:#fff}
+.btn-ghost:hover{border-color:var(--primary-light)}
+.btn-danger{color:var(--danger);border:1.5px solid #ecd3cb;background:#fff}
+.btn-danger:hover{background:#fbefeb}
+.btn-sm{height:32px;padding:0 13px;font-size:12px}
+.icon-btn{width:32px;height:32px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--line);background:#fff;transition:all .15s}
+.icon-btn:hover{border-color:var(--primary-light)}
+.icon-btn:disabled{opacity:.3;cursor:not-allowed}
+.icon-btn svg{width:15px;height:15px}
+label.f{display:block;font-size:12px;font-weight:700;margin:0 0 6px;color:var(--primary)}
+.f-hint{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.5}
+.field{margin-bottom:16px}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=tel],input[type=date],select,textarea{width:100%;height:42px;border:1.5px solid var(--line);border-radius:10px;padding:0 13px;background:#fff;outline:0;transition:border-color .15s}
+textarea{height:auto;min-height:88px;padding:11px 13px;line-height:1.55;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+.count{float:right;font-weight:600;color:var(--muted)}
+.count.warn{color:#b07a17}.count.bad{color:var(--danger)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:100px}
+.pill-demo{background:#fff3d6;color:#8a5a00}
+.pill-ok{background:#e1f1e8;color:var(--ok)}
+.pill-draft{background:#eee9e0;color:var(--muted)}
+.pill-edit{background:var(--mint);color:var(--accent)}
+
+/* ---------- login ---------- */
+.login{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,var(--secondary),var(--off))}
+.login-card{width:min(410px,100%);background:#fff;border-radius:22px;padding:36px 32px;box-shadow:0 30px 70px -30px rgba(42,53,55,.35)}
+.login-card h1{font-size:23px;font-weight:800;letter-spacing:-.01em;margin:14px 0 6px}
+.login-card p.sub{color:var(--muted);margin-bottom:24px;line-height:1.55}
+.demo-box{background:#fff8e6;border:1px solid #f1dfaf;border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.6;margin-bottom:20px;color:#6b4a06}
+.demo-box code{font-weight:800;background:#fff;padding:1px 6px;border-radius:5px}
+.err{color:var(--danger);font-size:12.5px;font-weight:600;margin:-4px 0 14px;min-height:18px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:230px 1fr;height:100%}
+.side{background:var(--primary-dark);color:#dfe7e6;display:flex;flex-direction:column;padding:22px 14px}
+.brand{padding:4px 10px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px}
+.brand b{display:block;color:#fff;font-size:16px;font-weight:800}
+.brand span{font-size:11.5px;color:#9fb1b0}
+.nav a{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;text-decoration:none;font-weight:600;color:#c9d6d5;margin-bottom:3px;transition:all .15s}
+.nav a svg{width:18px;height:18px;opacity:.85}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav a.on{background:rgba(222,234,232,.15);color:#fff}
+.side-foot{margin-top:auto;font-size:11.5px;color:#9fb1b0;padding:0 10px;line-height:1.6}
+.side-foot button{color:#fff;font-weight:700;text-decoration:underline;padding:0}
+.content{overflow:auto;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 28px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5;flex-wrap:wrap}
+.topbar h2{font-size:18px;font-weight:800;margin-right:auto}
+.view{padding:28px;max-width:1080px;width:100%}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:22px}
+.card+.card{margin-top:18px}
+.card h3{font-size:15px;font-weight:800;margin-bottom:4px}
+.card .desc{color:var(--muted);font-size:12.5px;margin-bottom:18px;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ---------- page list ---------- */
+.search{position:relative;margin-bottom:18px}
+.search input{padding-left:40px;height:46px;border-radius:12px}
+.search svg{position:absolute;left:14px;top:14px;width:18px;height:18px;color:var(--muted)}
+.group-title{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.plist{background:#fff;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
+.prow{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #f0ebe3;cursor:pointer;transition:background .12s}
+.prow:last-child{border-bottom:0}
+.prow:hover{background:var(--off)}
+.prow .t{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow .s{font-size:12px;color:var(--muted);white-space:nowrap}
+.prow .go{color:var(--muted)}
+.prow .go svg{width:16px;height:16px}
+
+/* ---------- editor ---------- */
+.editor{display:grid;grid-template-columns:1fr 360px;flex:1;min-height:0}
+.stage{background:#e9e5de;display:flex;justify-content:center;align-items:stretch;padding:18px;min-height:0;overflow:auto}
+.frame-wrap{width:100%;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px -24px rgba(42,53,55,.4);transition:width .3s var(--ease);position:relative}
+.frame-wrap.mobile{width:390px}
+.frame-wrap iframe{width:100%;height:100%;border:0;display:block;min-height:70vh}
+.frame-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--muted);font-weight:600}
+.panel{background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 12px}
+.tabs button{padding:15px 12px 13px;font-weight:700;font-size:13px;color:var(--muted);border-bottom:2.5px solid transparent}
+.tabs button.on{color:var(--primary);border-color:var(--primary-dark)}
+.panel-body{padding:20px;overflow:auto;flex:1}
+.tip{background:var(--mint);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.6;color:#2c5856;margin-bottom:18px}
+.tip b{color:#1f4543}
+.seg{display:inline-flex;background:var(--off);border:1.5px solid var(--line);border-radius:100px;padding:3px}
+.seg button{height:30px;padding:0 13px;border-radius:100px;font-weight:700;font-size:12px;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--primary);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.status{font-size:12px;font-weight:700;color:var(--muted)}
+.status.dirty{color:#b07a17}
+.img-list{display:flex;flex-direction:column;gap:10px}
+.img-item{display:flex;gap:11px;align-items:center;padding:9px;border:1.5px solid var(--line);border-radius:12px}
+.img-item img{width:62px;height:46px;object-fit:cover;border-radius:8px;background:var(--off);flex-shrink:0}
+.img-item .meta{flex:1;min-width:0}
+.img-item .meta b{font-size:12px;display:block}
+.img-item .meta span{font-size:11px;color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.serp{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:6px}
+.serp .u{font-size:12px;color:#4d5156}
+.serp .h{font-size:18px;color:#1a0dab;margin:4px 0;line-height:1.3}
+.serp .d{font-size:13px;color:#4d5156;line-height:1.5}
+.og-prev{width:100%;aspect-ratio:1.91/1;object-fit:cover;border-radius:10px;background:var(--off);border:1px solid var(--line);display:block;margin-bottom:10px}
+
+/* ---------- sortable ---------- */
+.sortable{list-style:none;display:flex;flex-direction:column;gap:8px}
+.sortable li{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;transition:box-shadow .15s,border-color .15s}
+.sortable li.dragging{opacity:.45}
+.sortable li.over{border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,122,120,.15)}
+.sortable li.locked{background:var(--off);cursor:default}
+.handle{cursor:grab;color:var(--muted);display:flex}
+.handle svg{width:18px;height:18px}
+.sortable li.locked .handle{cursor:not-allowed;opacity:.35}
+.sortable .lbl{flex:1;min-width:0;font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sortable .lbl small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+
+/* ---------- blog ---------- */
+.post-row{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid #f0ebe3}
+.post-row:last-child{border-bottom:0}
+.post-row img{width:64px;height:44px;border-radius:8px;object-fit:cover;background:var(--off);flex-shrink:0}
+.post-row .t{flex:1;min-width:0}
+.post-row .t b{display:block;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.post-row .t span{font-size:12px;color:var(--muted)}
+.post-row .acts{display:flex;gap:6px;flex-shrink:0}
+.rte-bar{display:flex;flex-wrap:wrap;gap:4px;padding:7px;border:1.5px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;background:var(--off)}
+.rte-bar button{height:30px;min-width:32px;padding:0 9px;border-radius:7px;font-weight:700;font-size:12px}
+.rte-bar button:hover{background:#fff}
+.rte{min-height:320px;border:1.5px solid var(--line);border-radius:0 0 10px 10px;padding:16px 18px;background:#fff;outline:0;line-height:1.75;font-size:15px}
+.rte:focus{border-color:var(--accent)}
+.rte h2{font-size:21px;margin:1em 0 .45em}.rte h3{font-size:17px;margin:.9em 0 .4em}
+.rte p{margin-bottom:.9em}.rte ul,.rte ol{margin:0 0 .9em 1.3em}
+.rte a{color:var(--accent)}
+.img-drop{border:1.5px dashed var(--line);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center}
+.img-drop img{width:120px;height:78px;object-fit:cover;border-radius:9px;background:var(--off)}
+
+/* ---------- practice ---------- */
+.hours-row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin-bottom:8px}
+.hours-row span{font-weight:700;font-size:13px}
+.fund-li img{width:74px;height:40px;object-fit:contain;background:var(--off);border-radius:8px;padding:4px;flex-shrink:0}
+.fund-li input{height:36px}
+
+/* ---------- modal & toast ---------- */
+.modal{position:fixed;inset:0;background:rgba(28,36,38,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-box{background:#fff;border-radius:18px;width:min(1000px,100%);height:min(86vh,900px);display:flex;flex-direction:column;overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:800}
+.modal-box iframe{flex:1;border:0;width:100%}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary-dark);color:#fff;padding:12px 20px;border-radius:100px;font-weight:700;font-size:13px;opacity:0;transition:all .25s var(--ease);z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.bad{background:var(--danger)}
+
+@media(max-width:1100px){
+  .editor{grid-template-columns:1fr}
+  .panel{border-left:0;border-top:1px solid var(--line)}
+  .frame-wrap iframe{min-height:60vh}
+}
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .side{flex-direction:row;align-items:center;padding:10px 12px;gap:6px;overflow-x:auto}
+  .brand,.side-foot{display:none}
+  .nav{display:flex;gap:4px}
+  .nav a{margin:0;white-space:nowrap;padding:9px 11px}
+  .view{padding:18px}
+  .topbar{padding:12px 16px}
+  .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- =============================== LOGIN =============================== -->
+<div id="login" class="login hidden">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <span class="pill pill-demo" id="modePill">Demo mode</span>
+    <h1><span data-site-name>Your site</span> dashboard</h1>
+    <p class="sub">Sign in to edit your website's wording, images, SEO, blog and practice details.</p>
+    <div class="demo-box" id="demoBox">
+      This is a <b>demo</b>. Changes are saved in this browser only and are not published.<br>
+      Sign in with <code id="demoEmail"></code> and password <code id="demoPass"></code>
+    </div>
+    <div class="field"><label class="f" for="lEmail">Email</label><input id="lEmail" type="email" required autocomplete="username"></div>
+    <div class="field"><label class="f" for="lPass">Password</label><input id="lPass" type="password" required autocomplete="current-password"></div>
+    <div class="err" id="lErr"></div>
+    <button class="btn btn-primary" style="width:100%;height:46px" type="submit">Sign in</button>
+  </form>
+</div>
+
+<!-- =============================== APP ================================= -->
+<div id="app" class="shell hidden">
+  <aside class="side">
+    <div class="brand"><b data-site-name>Site</b><span>Website dashboard</span></div>
+    <nav class="nav">
+      <a href="#pages" data-nav="pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Pages</a>
+      <a href="#blog" data-nav="blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>Blog posts</a>
+      <a href="#practice" data-nav="practice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Practice details</a>
+      <a href="#settings" data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
+    </nav>
+    <div class="side-foot">Signed in as<br><b id="whoami" style="color:#fff"></b><br><button id="signOut">Sign out</button></div>
+  </aside>
+  <main class="content" id="content"></main>
+</div>
+
+<input type="file" id="filePick" accept="image/*" class="hidden">
+<div class="toast" id="toast"></div>
+
+<script src="../cms/site.js"></script>
+<script src="../cms/adapter.js"></script>
+<script>
+(function () {
+'use strict';
+const A = window.CMS_ADAPTER;
+const SITE = window.CMS_SITE || { name: 'Website', defaults: {} };
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const ICON = {
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="18 15 12 9 6 15"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>',
+  grip: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  go: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+};
+
+$$('[data-site-name]').forEach(el => el.textContent = SITE.name);
+const isDemo = A.mode === 'demo';
+if (!isDemo) { $('#demoBox').remove(); $('#modePill').remove(); }
+else {
+  $('#demoEmail').textContent = A.auth.demoCredentials.email;
+  $('#demoPass').textContent = A.auth.demoCredentials.password;
+}
+
+/* -------------------------------------------------- toast */
+let toastT;
+function toast(msg, bad) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'toast show' + (bad ? ' bad' : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.className = 'toast', 2600);
+}
+
+/* ------------------------------------------ image picking */
+function pickFile() {
+  return new Promise(resolve => {
+    const f = $('#filePick');
+    f.value = '';
+    f.onchange = () => resolve(f.files[0] || null);
+    f.click();
+  });
+}
+
+// Resize + compress in the browser before upload, whatever the backend.
+function compressImage(file, maxW = 2000, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    if (!/^image\//.test(file.type)) return reject(new Error('Please choose an image file.'));
+    if (/svg/.test(file.type)) return resolve(file);
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.naturalWidth);
+      const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      const keepAlpha = /png|webp|gif/.test(file.type);
+      if (!keepAlpha) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      c.toBlob(b => b ? resolve(b) : reject(new Error('Could not process that image.')), 'image/webp', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read that image.')); };
+    img.src = url;
+  });
+}
+
+async function chooseAndUpload(maxW) {
+  const file = await pickFile();
+  if (!file) return null;
+  try {
+    toast('Uploading image...');
+    const blob = await compressImage(file, maxW);
+    const src = await A.uploadImage(blob, file.name.replace(/\.[^.]+$/, '') + '.webp');
+    return { src, name: file.name };
+  } catch (e) { toast(e.message || 'Upload failed', true); return null; }
+}
+
+/* --------------------------------------------- sortable list */
+function makeSortable(ul, onChange) {
+  let dragEl = null;
+  ul.addEventListener('mousedown', e => {
+    const li = e.target.closest('li'); if (!li || li.classList.contains('locked')) return;
+    li.setAttribute('draggable', e.target.closest('input,textarea,button,select') ? 'false' : 'true');
+  });
+  ul.addEventListener('dragstart', e => {
+    const li = e.target.closest('li');
+    if (!li || li.classList.contains('locked')) { e.preventDefault(); return; }
+    dragEl = li; li.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', li.dataset.id || '');
+  });
+  ul.addEventListener('dragend', () => {
+    if (dragEl) dragEl.classList.remove('dragging');
+    $$('li.over', ul).forEach(x => x.classList.remove('over'));
+    dragEl = null;
+  });
+  ul.addEventListener('dragover', e => {
+    if (!dragEl) return;
+    e.preventDefault();
+    const li = e.target.closest('li');
+    $$('li.over', ul).forEach(x => x.classList.remove('over'));
+    if (!li || li === dragEl || li.classList.contains('locked')) return;
+    li.classList.add('over');
+    const r = li.getBoundingClientRect();
+    const after = e.clientY > r.top + r.height / 2;
+    li.parentNode.insertBefore(dragEl, after ? li.nextSibling : li);
+  });
+  ul.addEventListener('drop', e => { e.preventDefault(); onChange(); refreshArrows(ul); });
+  ul.addEventListener('click', e => {
+    const b = e.target.closest('[data-move]');
+    if (!b) return;
+    const li = b.closest('li');
+    if (b.dataset.move === 'up') {
+      const prev = li.previousElementSibling;
+      if (prev && !prev.classList.contains('locked')) ul.insertBefore(li, prev);
+    } else {
+      const next = li.nextElementSibling;
+      if (next) ul.insertBefore(next, li);
+    }
+    onChange(); refreshArrows(ul);
+  });
+  refreshArrows(ul);
+}
+function refreshArrows(ul) {
+  const items = $$('li', ul);
+  items.forEach((li, i) => {
+    const up = $('[data-move="up"]', li), dn = $('[data-move="down"]', li);
+    if (up) up.disabled = i === 0 || (items[i - 1] && items[i - 1].classList.contains('locked'));
+    if (dn) dn.disabled = i === items.length - 1;
+  });
+}
+const moveBtns = `<button class="icon-btn" data-move="up" title="Move up" type="button">${ICON.up}</button><button class="icon-btn" data-move="down" title="Move down" type="button">${ICON.down}</button>`;
+
+/* ------------------------------------------------ state */
+let PAGES = [];
+let dirty = false;
+function setDirty(v) {
+  dirty = v;
+  const s = $('#saveState'); if (s) { s.textContent = v ? 'Unsaved changes' : 'All changes saved'; s.className = 'status' + (v ? ' dirty' : ''); }
+  const b = $('#saveBtn'); if (b) b.disabled = !v;
+}
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+function guard() { return !dirty || confirm('You have unsaved changes. Leave without saving?'); }
+
+/* ================================================== ROUTER */
+let cleanup = null;
+async function route() {
+  if (cleanup) { cleanup(); cleanup = null; }
+  const h = location.hash.replace(/^#/, '') || 'pages';
+  const [view, arg] = h.split('/');
+  $$('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === (view === 'edit' ? 'pages' : view === 'post' ? 'blog' : view)));
+  setDirty(false);
+  if (view === 'pages') return viewPages();
+  if (view === 'edit') return viewEditor(decodeURIComponent(arg || 'index'));
+  if (view === 'blog') return viewBlog();
+  if (view === 'post') return viewPost(arg ? decodeURIComponent(arg) : null);
+  if (view === 'practice') return viewPractice();
+  if (view === 'settings') return viewSettings();
+  return viewPages();
+}
+let lastHash = location.hash;
+window.addEventListener('hashchange', e => {
+  if (dirty && !confirm('You have unsaved changes. Leave without saving?')) {
+    history.replaceState(null, '', lastHash || '#pages');
+    return;
+  }
+  dirty = false;
+  lastHash = location.hash;
+  route();
+});
+
+/* ================================================== PAGES */
+async function viewPages() {
+  const edited = new Set((await A.list('page:')).map(x => x.key.slice(5)));
+  const c = $('#content');
+  c.innerHTML = `
+    <div class="topbar"><h2>Pages</h2><a class="btn btn-ghost btn-sm" href="../index.html" target="_blank">${ICON.ext}View site</a></div>
+    <div class="view">
+      <div class="search">${ICON.search}<input type="text" id="pSearch" placeholder="Search ${PAGES.length} pages by name"></div>
+      <div id="pList"></div>
+    </div>`;
+  const render = q => {
+    q = (q || '').toLowerCase();
+    const groups = ['Main pages', 'Services', 'Blog posts'];
+    $('#pList').innerHTML = groups.map(g => {
+      let items = PAGES.filter(p => p.group === g && (!q || (p.title + ' ' + p.slug).toLowerCase().includes(q)));
+      if (g === 'Blog posts') items = items.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      if (!items.length) return '';
+      return `<div class="group-title">${g} &middot; ${items.length}</div><div class="plist">` +
+        items.map(p => `<div class="prow" data-slug="${esc(p.slug)}">
+          <span class="t">${esc(p.title)}</span>
+          ${edited.has(p.slug) ? '<span class="pill pill-edit">Edited</span>' : ''}
+          <span class="s">${p.date ? esc(p.date) : '/' + esc(p.slug === 'index' ? '' : p.slug)}</span>
+          <span class="go">${ICON.go}</span></div>`).join('') + '</div>';
+    }).join('') || '<p style="color:var(--muted)">No pages match that search.</p>';
+  };
+  render();
+  $('#pSearch').addEventListener('input', e => render(e.target.value));
+  $('#pList').addEventListener('click', e => {
+    const r = e.target.closest('.prow'); if (r) location.hash = 'edit/' + encodeURIComponent(r.dataset.slug);
+  });
+}
+
+/* ================================================== EDITOR */
+async function viewEditor(slug) {
+  const page = PAGES.find(p => p.slug === slug) || { slug, file: slug + '.html', title: slug };
+  const saved = (await A.get('page:' + slug)) || {};
+  const draft = {
+    text: Object.assign({}, saved.text || {}),
+    img: Object.assign({}, saved.img || {}),
+    seo: Object.assign({}, saved.seo || {}),
+    order: saved.order ? saved.order.slice() : null,
+  };
+  let info = null;
+  let tab = 'content';
+  const c = $('#content');
+  c.innerHTML = `
+    <div class="topbar">
+      <a class="btn btn-ghost btn-sm" href="#pages">${ICON.back}Pages</a>
+      <h2 style="margin-right:0">${esc(page.title)}</h2>
+      <span style="margin-right:auto"></span>
+      <div class="seg" id="device"><button class="on" data-d="desktop">Desktop</button><button data-d="mobile">Mobile</button></div>
+      <span class="status" id="saveState">All changes saved</span>
+      <a class="btn btn-ghost btn-sm" href="../${esc(page.file)}" target="_blank">${ICON.ext}View</a>
+      <button class="btn btn-primary btn-sm" id="saveBtn" disabled>Save changes</button>
+    </div>
+    <div class="editor">
+      <div class="stage"><div class="frame-wrap" id="fw"><div class="frame-loading" id="fLoad">Loading page...</div>
+        <iframe id="frame" title="Page preview" src="../${esc(page.file)}?cms-edit=1"></iframe></div></div>
+      <div class="panel">
+        <div class="tabs" id="tabs"><button data-t="content" class="on">Content</button><button data-t="seo">SEO</button><button data-t="sections">Sections</button></div>
+        <div class="panel-body" id="pb"></div>
+      </div>
+    </div>`;
+  const frame = $('#frame');
+  const send = m => frame.contentWindow && frame.contentWindow.postMessage(Object.assign({ source: 'gya-cms-admin' }, m), location.origin);
+
+  $('#device').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $$('#device button').forEach(x => x.classList.toggle('on', x === b));
+    $('#fw').classList.toggle('mobile', b.dataset.d === 'mobile');
+  });
+  $('#tabs').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    tab = b.dataset.t;
+    $$('#tabs button').forEach(x => x.classList.toggle('on', x === b));
+    renderPanel();
+  });
+
+  function onMsg(e) {
+    if (e.origin !== location.origin || e.source !== frame.contentWindow || !e.data || e.data.source !== 'gya-cms') return;
+    const m = e.data;
+    if (m.type === 'ready') send({ type: 'start-edit' });
+    if (m.type === 'page-info') {
+      info = m;
+      $('#fLoad').classList.add('hidden');
+      renderPanel();
+    }
+    if (m.type === 'text') { draft.text[m.id] = m.html; setDirty(true); }
+    if (m.type === 'pick-image') replaceImage(m.id);
+  }
+  window.addEventListener('message', onMsg);
+  cleanup = () => window.removeEventListener('message', onMsg);
+
+  async function replaceImage(id) {
+    const r = await chooseAndUpload(2000);
+    if (!r) return;
+    const prevAlt = (draft.img[id] && draft.img[id].alt) || (info && (info.images.find(x => x.id === id) || {}).alt) || '';
+    draft.img[id] = { src: r.src, alt: prevAlt };
+    send({ type: 'set-image', id, src: r.src, alt: prevAlt });
+    if (info) { const im = info.images.find(x => x.id === id); if (im) im.src = r.src; }
+    setDirty(true); toast('Image replaced'); if (tab === 'content') renderPanel();
+  }
+
+  function renderPanel() {
+    const pb = $('#pb');
+    if (!info) { pb.innerHTML = '<p style="color:var(--muted)">Loading...</p>'; return; }
+
+    if (tab === 'content') {
+      pb.innerHTML = `
+        <div class="tip"><b>Click any text on the page</b> to edit it in place.<br><b>Click any image</b> to replace it.<br>Press <b>Save changes</b> when you're done.</div>
+        <div class="field"><label class="f">Images on this page (${info.images.length})</label>
+          <div class="img-list">${info.images.map(im => {
+            const d = draft.img[im.id] || {};
+            return `<div class="img-item" data-id="${esc(im.id)}">
+              <img src="${esc(d.src || im.src)}" alt="">
+              <div class="meta"><input type="text" class="alt-in" data-id="${esc(im.id)}" value="${esc(d.alt != null && d.alt !== '' ? d.alt : im.alt)}" placeholder="Describe this image (alt text)" style="height:34px;font-size:12px"></div>
+              <button class="btn btn-ghost btn-sm" data-replace="${esc(im.id)}" type="button">Replace</button></div>`;
+          }).join('') || '<p style="color:var(--muted);font-size:12.5px">No editable images on this page.</p>'}</div>
+          <p class="f-hint">Alt text describes the image for Google and screen readers.</p>
+        </div>
+        <div class="field" style="margin-top:22px"><label class="f">Start again</label>
+          <button class="btn btn-danger btn-sm" id="revert" type="button">Restore original page</button>
+          <p class="f-hint">Removes every saved change to this page, including SEO and section order.</p></div>`;
+      $$('[data-replace]', pb).forEach(b => b.onclick = () => replaceImage(b.dataset.replace));
+      $$('.img-item img', pb).forEach(i => i.onclick = () => send({ type: 'scroll-to', id: i.closest('.img-item').dataset.id }));
+      $$('.alt-in', pb).forEach(inp => inp.oninput = () => {
+        const id = inp.dataset.id;
+        draft.img[id] = Object.assign({}, draft.img[id] || {}, { alt: inp.value });
+        send({ type: 'set-image', id, src: draft.img[id].src || '', alt: inp.value });
+        setDirty(true);
+      });
+      $('#revert').onclick = async () => {
+        if (!confirm('Restore this page to how it was originally built? All saved changes to it will be lost.')) return;
+        await A.remove('page:' + slug); dirty = false; toast('Page restored'); route();
+      };
+    }
+
+    if (tab === 'seo') {
+      const title = draft.seo.title != null ? draft.seo.title : info.title;
+      const desc = draft.seo.description != null ? draft.seo.description : info.description;
+      const og = draft.seo.ogImage || info.ogImage;
+      const url = location.origin + '/' + (slug === 'index' ? '' : slug);
+      pb.innerHTML = `
+        <div class="field"><label class="f">Page title <span class="count" id="tc"></span></label>
+          <input type="text" id="sTitle" value="${esc(title)}"><p class="f-hint">Shown as the headline in Google. Aim for 50 to 60 characters.</p></div>
+        <div class="field"><label class="f">Meta description <span class="count" id="dc"></span></label>
+          <textarea id="sDesc" rows="4">${esc(desc)}</textarea><p class="f-hint">The summary under the headline in Google. Aim for 120 to 160 characters.</p></div>
+        <div class="field"><label class="f">Google preview</label>
+          <div class="serp"><div class="u">${esc(url)}</div><div class="h" id="pvT"></div><div class="d" id="pvD"></div></div></div>
+        <div class="field"><label class="f">Social share image</label>
+          ${og ? `<img class="og-prev" src="${esc(og)}" alt="">` : '<div class="og-prev" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">No share image set</div>'}
+          <button class="btn btn-ghost btn-sm" id="ogUp" type="button">${og ? 'Replace' : 'Upload'} image</button>
+          ${draft.seo.ogImage ? '<button class="btn btn-ghost btn-sm" id="ogClr" type="button">Use original</button>' : ''}
+          <p class="f-hint">Used when the page is shared on Facebook, LinkedIn or in messages. Best at 1200 x 630.</p></div>`;
+      const upd = () => {
+        const t = $('#sTitle').value, d = $('#sDesc').value;
+        const tc = $('#tc'), dc = $('#dc');
+        tc.textContent = t.length; tc.className = 'count' + (t.length > 65 ? ' bad' : t.length > 60 ? ' warn' : '');
+        dc.textContent = d.length; dc.className = 'count' + (d.length > 170 ? ' bad' : d.length > 160 ? ' warn' : '');
+        $('#pvT').textContent = t.length > 62 ? t.slice(0, 60) + '...' : t;
+        $('#pvD').textContent = d.length > 162 ? d.slice(0, 158) + '...' : d;
+      };
+      upd();
+      $('#sTitle').oninput = e => { draft.seo.title = e.target.value; setDirty(true); upd(); };
+      $('#sDesc').oninput = e => { draft.seo.description = e.target.value; setDirty(true); upd(); };
+      $('#ogUp').onclick = async () => {
+        const r = await chooseAndUpload(1200); if (!r) return;
+        draft.seo.ogImage = r.src; setDirty(true); renderPanel();
+      };
+      const clr = $('#ogClr'); if (clr) clr.onclick = () => { delete draft.seo.ogImage; setDirty(true); renderPanel(); };
+    }
+
+    if (tab === 'sections') {
+      const byId = Object.fromEntries(info.sections.map(s => [s.id, s]));
+      const pinned = info.sections.filter(s => s.pinned);
+      const movable = info.sections.filter(s => !s.pinned);
+      let ordered = movable;
+      if (draft.order) {
+        const want = draft.order.map(id => byId[id]).filter(s => s && !s.pinned);
+        ordered = want.concat(movable.filter(s => !want.includes(s)));
+      }
+      pb.innerHTML = `
+        <div class="tip"><b>Drag sections</b> to change the order they appear on the page, or use the arrows. The top banner stays first.</div>
+        <ul class="sortable" id="secList">
+          ${pinned.map(s => `<li class="locked" data-id="${esc(s.id)}"><span class="handle">${ICON.lock}</span><span class="lbl">${esc(s.label)}<small>Top banner, fixed</small></span></li>`).join('')}
+          ${ordered.map(s => `<li draggable="true" data-id="${esc(s.id)}"><span class="handle">${ICON.grip}</span><span class="lbl">${esc(s.label)}</span>${moveBtns}</li>`).join('')}
+        </ul>
+        <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" id="resetOrder" type="button">Reset to original order</button></div>`;
+      const ul = $('#secList');
+      makeSortable(ul, () => {
+        draft.order = $$('li:not(.locked)', ul).map(li => li.dataset.id);
+        send({ type: 'set-order', order: draft.order });
+        setDirty(true);
+      });
+      $$('.lbl', ul).forEach(l => l.onclick = () => send({ type: 'scroll-to', id: l.closest('li').dataset.id }));
+      $('#resetOrder').onclick = () => {
+        draft.order = movable.map(s => s.id);
+        send({ type: 'set-order', order: draft.order });
+        draft.order = null; setDirty(true); renderPanel();
+      };
+    }
+  }
+
+  $('#saveBtn').onclick = async () => {
+    const doc = {};
+    if (Object.keys(draft.text).length) doc.text = draft.text;
+    if (Object.keys(draft.img).length) doc.img = draft.img;
+    const seo = {};
+    if (draft.seo.title && draft.seo.title.trim()) seo.title = draft.seo.title.trim();
+    if (draft.seo.description && draft.seo.description.trim()) seo.description = draft.seo.description.trim();
+    if (draft.seo.ogImage) seo.ogImage = draft.seo.ogImage;
+    if (Object.keys(seo).length) doc.seo = seo;
+    if (draft.order) doc.order = draft.order;
+    try {
+      if (Object.keys(doc).length) await A.set('page:' + slug, doc); else await A.remove('page:' + slug);
+      setDirty(false); toast('Changes saved');
+    } catch (e) { toast('Could not save: ' + (e.message || e), true); }
+  };
+  renderPanel();
+}
+
+/* ================================================== BLOG */
+async function getPosts() { return ((await A.get('site:posts')) || []).filter(p => p && p.slug !== '__preview__'); }
+const fmtDate = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); };
+
+async function viewBlog() {
+  const posts = (await getPosts()).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const built = PAGES.filter(p => p.group === 'Blog posts').sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  $('#content').innerHTML = `
+    <div class="topbar"><h2>Blog posts</h2><a class="btn btn-ghost btn-sm" href="../blog.html" target="_blank">${ICON.ext}View blog</a><a class="btn btn-primary btn-sm" href="#post">+ New post</a></div>
+    <div class="view">
+      <div class="group-title">Written in the dashboard &middot; ${posts.length}</div>
+      <div class="plist">${posts.length ? posts.map(p => `
+        <div class="post-row">
+          ${p.image ? `<img src="${esc(p.image)}" alt="">` : '<img alt="">'}
+          <div class="t"><b>${esc(p.title || 'Untitled')}</b><span>${esc(fmtDate(p.date))} &middot; ${esc(p.category || 'Blog')}</span></div>
+          <span class="pill ${p.status === 'published' ? 'pill-ok' : 'pill-draft'}">${p.status === 'published' ? 'Published' : 'Draft'}</span>
+          <div class="acts"><a class="btn btn-ghost btn-sm" href="#post/${encodeURIComponent(p.slug)}">Edit</a></div>
+        </div>`).join('') : '<div style="padding:22px;color:var(--muted)">No posts yet. Use <b>+ New post</b> to write one.</div>'}</div>
+      <div class="group-title">Existing articles &middot; ${built.length}</div>
+      <div class="search" style="margin-bottom:12px">${ICON.search}<input type="text" id="bSearch" placeholder="Search existing articles"></div>
+      <div class="plist" id="bList"></div>
+    </div>`;
+  const render = q => {
+    q = (q || '').toLowerCase();
+    const items = built.filter(p => !q || p.title.toLowerCase().includes(q));
+    $('#bList').innerHTML = items.map(p => `<div class="prow" data-slug="${esc(p.slug)}"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.date || '')}</span><span class="btn btn-ghost btn-sm">Edit on page</span></div>`).join('')
+      || '<div style="padding:20px;color:var(--muted)">No articles match.</div>';
+  };
+  render();
+  $('#bSearch').oninput = e => render(e.target.value);
+  $('#bList').onclick = e => { const r = e.target.closest('.prow'); if (r) location.hash = 'edit/' + encodeURIComponent(r.dataset.slug); };
+}
+
+const slugify = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+
+async function viewPost(slug) {
+  const posts = await getPosts();
+  const existing = slug ? posts.find(p => p.slug === slug) : null;
+  if (slug && !existing) { toast('That post no longer exists', true); location.hash = 'blog'; return; }
+  const p = existing ? Object.assign({}, existing) : {
+    title: '', slug: '', date: new Date().toISOString().slice(0, 10), category: 'Blog',
+    excerpt: '', image: '', imageAlt: '', body: '<p></p>', seoTitle: '', seoDescription: '', status: 'draft',
+  };
+  let slugTouched = !!existing;
+  const cats = [...new Set(['Blog', 'Dental Tips', 'Oral Health', 'Cosmetic', 'Orthodontics'].concat(posts.map(x => x.category).filter(Boolean)))];
+
+  $('#content').innerHTML = `
+    <div class="topbar">
+      <a class="btn btn-ghost btn-sm" href="#blog">${ICON.back}Blog</a>
+      <h2>${existing ? 'Edit post' : 'New post'}</h2>
+      <span class="status" id="saveState">All changes saved</span>
+      <button class="btn btn-ghost btn-sm" id="prev" type="button">Preview</button>
+      ${existing ? '<button class="btn btn-danger btn-sm" id="del" type="button">Delete</button>' : ''}
+      <button class="btn btn-ghost btn-sm" id="saveDraft" type="button">Save draft</button>
+      <button class="btn btn-primary btn-sm" id="saveBtn" type="button">${p.status === 'published' ? 'Update' : 'Publish'}</button>
+    </div>
+    <div class="view">
+      <div class="card">
+        <div class="field"><label class="f" for="pTitle">Title</label><input type="text" id="pTitle" value="${esc(p.title)}" placeholder="What is this article about?"></div>
+        <div class="grid2">
+          <div class="field"><label class="f" for="pSlug">Web address</label><input type="text" id="pSlug" value="${esc(p.slug)}"><p class="f-hint" id="slugHint"></p></div>
+          <div class="grid2">
+            <div class="field"><label class="f" for="pDate">Date</label><input type="date" id="pDate" value="${esc(String(p.date).slice(0, 10))}"></div>
+            <div class="field"><label class="f" for="pCat">Category</label><input type="text" id="pCat" list="catList" value="${esc(p.category)}"><datalist id="catList">${cats.map(x => `<option value="${esc(x)}">`).join('')}</datalist></div>
+          </div>
+        </div>
+        <div class="field"><label class="f">Featured image</label>
+          <div class="img-drop"><img id="pImg" src="${esc(p.image)}" alt="" ${p.image ? '' : 'style="visibility:hidden"'}>
+            <div style="flex:1"><button class="btn btn-ghost btn-sm" id="pImgUp" type="button">${p.image ? 'Replace' : 'Upload'} image</button>
+            <input type="text" id="pAlt" value="${esc(p.imageAlt)}" placeholder="Describe the image (alt text)" style="margin-top:10px;height:36px"></div></div></div>
+        <div class="field"><label class="f" for="pEx">Summary <span class="count" id="exc"></span></label>
+          <textarea id="pEx" rows="3" placeholder="One or two sentences shown on the blog page">${esc(p.excerpt)}</textarea></div>
+        <div class="field"><label class="f">Article</label>
+          <div class="rte-bar" id="rteBar">
+            <button type="button" data-c="formatBlock" data-v="P">Text</button>
+            <button type="button" data-c="formatBlock" data-v="H2">Heading</button>
+            <button type="button" data-c="formatBlock" data-v="H3">Subheading</button>
+            <button type="button" data-c="bold"><b>B</b></button>
+            <button type="button" data-c="italic"><i>I</i></button>
+            <button type="button" data-c="insertUnorderedList">&bull; List</button>
+            <button type="button" data-c="insertOrderedList">1. List</button>
+            <button type="button" data-c="link">Link</button>
+            <button type="button" data-c="unlink">Unlink</button>
+          </div>
+          <div class="rte" id="rte" contenteditable="true"></div></div>
+      </div>
+      <div class="card"><h3>SEO</h3><p class="desc">Leave these blank to use the title and summary.</p>
+        <div class="field"><label class="f" for="pSt">SEO title <span class="count" id="stc"></span></label><input type="text" id="pSt" value="${esc(p.seoTitle)}"></div>
+        <div class="field"><label class="f" for="pSd">Meta description <span class="count" id="sdc"></span></label><textarea id="pSd" rows="3">${esc(p.seoDescription)}</textarea></div>
+      </div>
+    </div>`;
+
+  const rte = $('#rte');
+  rte.innerHTML = cleanBody(p.body);
+  const taken = new Set(PAGES.map(x => x.slug).concat(posts.filter(x => x !== existing).map(x => x.slug)).concat(['post', 'admin', 'cms']));
+
+  const counts = () => {
+    const set = (id, n, lo, hi) => { const e = $(id); e.textContent = n; e.className = 'count' + (n > hi ? ' bad' : n > lo ? ' warn' : ''); };
+    set('#exc', $('#pEx').value.length, 180, 240);
+    set('#stc', $('#pSt').value.length, 60, 65);
+    set('#sdc', $('#pSd').value.length, 160, 170);
+    const s = $('#pSlug').value;
+    $('#slugHint').textContent = s ? (taken.has(s) ? 'That address is already used by another page.' : 'post.html?slug=' + s) : 'Filled in from the title.';
+    $('#slugHint').style.color = taken.has(s) ? 'var(--danger)' : '';
+  };
+  const mark = () => { setDirty(true); counts(); };
+  $('#pTitle').addEventListener('input', e => { if (!slugTouched) $('#pSlug').value = slugify(e.target.value); mark(); });
+  $('#pSlug').addEventListener('input', e => {
+    slugTouched = true;
+    const pos = e.target.selectionStart;
+    e.target.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-{2,}/g, '-').slice(0, 80);
+    try { e.target.setSelectionRange(pos, pos); } catch (_) {}
+    mark();
+  });
+  ['#pDate', '#pCat', '#pEx', '#pAlt', '#pSt', '#pSd'].forEach(s => $(s).addEventListener('input', mark));
+  rte.addEventListener('input', () => setDirty(true));
+  rte.addEventListener('paste', e => {
+    e.preventDefault();
+    const t = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, t);
+  });
+  $('#rteBar').addEventListener('mousedown', e => e.preventDefault());
+  $('#rteBar').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    rte.focus();
+    if (b.dataset.c === 'link') {
+      const u = prompt('Link address (for example https://... or contact.html)');
+      if (u && !/^\s*javascript:/i.test(u)) document.execCommand('createLink', false, u.trim());
+    } else if (b.dataset.c === 'formatBlock') document.execCommand('formatBlock', false, b.dataset.v);
+    else document.execCommand(b.dataset.c, false, null);
+    setDirty(true);
+  });
+  $('#pImgUp').onclick = async () => {
+    const r = await chooseAndUpload(1800); if (!r) return;
+    p.image = r.src; const i = $('#pImg'); i.src = r.src; i.style.visibility = 'visible';
+    $('#pImgUp').textContent = 'Replace image'; setDirty(true);
+  };
+  counts();
+
+  function collect(status) {
+    const out = {
+      title: $('#pTitle').value.trim(),
+      slug: slugify($('#pSlug').value),
+      date: $('#pDate').value || new Date().toISOString().slice(0, 10),
+      category: $('#pCat').value.trim() || 'Blog',
+      excerpt: $('#pEx').value.trim(),
+      image: p.image || '',
+      imageAlt: $('#pAlt').value.trim(),
+      body: cleanBody(rte.innerHTML),
+      seoTitle: $('#pSt').value.trim(),
+      seoDescription: $('#pSd').value.trim(),
+      status: status,
+      updated: new Date().toISOString(),
+    };
+    if (!out.excerpt) out.excerpt = rte.innerText.replace(/\s+/g, ' ').trim().slice(0, 180);
+    return out;
+  }
+  async function save(status) {
+    const out = collect(status);
+    if (!out.title) { toast('Please add a title', true); $('#pTitle').focus(); return; }
+    if (!out.slug) out.slug = slugify(out.title);
+    if (taken.has(out.slug)) { toast('That web address is already in use', true); $('#pSlug').focus(); return; }
+    if (status === 'published' && !rte.innerText.trim()) { toast('The article is empty', true); return; }
+    const all = await getPosts();
+    const i = existing ? all.findIndex(x => x.slug === existing.slug) : -1;
+    if (i >= 0) all[i] = out; else all.push(out);
+    await A.set('site:posts', all);
+    setDirty(false);
+    toast(status === 'published' ? 'Post published' : 'Draft saved');
+    history.replaceState(null, '', '#post/' + encodeURIComponent(out.slug));
+    lastHash = location.hash;
+    viewPost(out.slug);
+  }
+  $('#saveBtn').onclick = () => save('published');
+  $('#saveDraft').onclick = () => save('draft');
+  const del = $('#del');
+  if (del) del.onclick = async () => {
+    if (!confirm('Delete this post permanently?')) return;
+    const all = (await getPosts()).filter(x => x.slug !== existing.slug);
+    await A.set('site:posts', all); dirty = false; toast('Post deleted'); location.hash = 'blog';
+  };
+  $('#prev').onclick = async () => {
+    const tmp = collect(p.status || 'draft');
+    if (!tmp.title) { toast('Add a title to preview', true); return; }
+    const all = await getPosts();
+    const key = '__preview__';
+    const prevPost = Object.assign({}, tmp, { slug: key, status: 'draft' });
+    await A.set('site:posts', all.filter(x => x.slug !== key).concat([prevPost]));
+    openModal('Preview', '../post.html?slug=' + key + '&cms-edit=1', async () => {
+      const cur = await getPosts(); await A.set('site:posts', cur.filter(x => x.slug !== key));
+    });
+  };
+}
+
+function cleanBody(h) {
+  const doc = new DOMParser().parseFromString('<div>' + (h || '') + '</div>', 'text/html');
+  const ok = { P: 1, H2: 1, H3: 1, H4: 1, UL: 1, OL: 1, LI: 1, B: 1, STRONG: 1, I: 1, EM: 1, A: 1, BR: 1, BLOCKQUOTE: 1 };
+  (function walk(n) {
+    [...n.childNodes].forEach(c => {
+      if (c.nodeType === 3) return;
+      if (c.nodeType !== 1) { c.remove(); return; }
+      if (c.tagName === 'DIV') { const p = doc.createElement('p'); while (c.firstChild) p.appendChild(c.firstChild); c.replaceWith(p); walk(p); return; }
+      if (!ok[c.tagName]) { walk(c); while (c.firstChild) c.parentNode.insertBefore(c.firstChild, c); c.remove(); return; }
+      [...c.attributes].forEach(a => { if (!(c.tagName === 'A' && a.name === 'href')) c.removeAttribute(a.name); });
+      if (c.tagName === 'A' && /^\s*(javascript|data|vbscript):/i.test(c.getAttribute('href') || '')) c.removeAttribute('href');
+      walk(c);
+    });
+  })(doc.body.firstChild);
+  return doc.body.firstChild.innerHTML.replace(/<p>\s*<\/p>/g, '').trim() || '<p></p>';
+}
+
+function openModal(title, src, onClose) {
+  const m = document.createElement('div');
+  m.className = 'modal';
+  m.innerHTML = `<div class="modal-box"><div class="modal-head"><span>${esc(title)}</span><button class="icon-btn" type="button">${ICON.x}</button></div><iframe src="${esc(src)}"></iframe></div>`;
+  document.body.appendChild(m);
+  const close = () => { m.remove(); onClose && onClose(); };
+  $('.icon-btn', m).onclick = close;
+  m.onclick = e => { if (e.target === m) close(); };
+}
+
+/* ================================================== PRACTICE */
+async function viewPractice() {
+  const d = SITE.defaults || {};
+  const saved = (await A.get('site:practice')) || {};
+  const P = {
+    phone: saved.phone || d.phone || '', tel: saved.tel || d.tel || '', email: saved.email || d.email || '',
+    address1: saved.address1 || d.address1 || '', address2: saved.address2 || d.address2 || '',
+    bookingUrl: saved.bookingUrl || d.bookingUrl || '',
+    hours: (saved.hours && saved.hours.length ? saved.hours : d.hours || []).map(h => Object.assign({}, h)),
+    funds: (saved.funds && saved.funds.length ? saved.funds : d.funds || []).map(f => Object.assign({}, f)),
+  };
+  const logoSrc = src => /^(https?:|data:|\/)/.test(src) ? src : '../' + src;
+
+  $('#content').innerHTML = `
+    <div class="topbar"><h2>Practice details</h2><span class="status" id="saveState">All changes saved</span><button class="btn btn-primary btn-sm" id="saveBtn" disabled>Save changes</button></div>
+    <div class="view">
+      <div class="card"><h3>Contact</h3><p class="desc">Changing these updates them everywhere on the website: header, footer, buttons and contact page.</p>
+        <div class="grid2">
+          <div class="field"><label class="f" for="cPhone">Phone number (as shown)</label><input type="tel" id="cPhone" value="${esc(P.phone)}"><p class="f-hint">For example (02) 4322 6617</p></div>
+          <div class="field"><label class="f" for="cTel">Phone number for tap-to-call</label><input type="text" id="cTel" value="${esc(P.tel)}"><p class="f-hint">Digits only. Filled in from the number above.</p></div>
+        </div>
+        <div class="field"><label class="f" for="cEmail">Email</label><input type="email" id="cEmail" value="${esc(P.email)}"></div>
+        <div class="grid2">
+          <div class="field"><label class="f" for="cA1">Street address</label><input type="text" id="cA1" value="${esc(P.address1)}"></div>
+          <div class="field"><label class="f" for="cA2">Suburb, state, postcode</label><input type="text" id="cA2" value="${esc(P.address2)}"></div>
+        </div>
+      </div>
+      <div class="card"><h3>Opening hours</h3><p class="desc">Shown in the footer on every page and on the contact page.</p>
+        <div id="hoursBox">${P.hours.map((h, i) => `<div class="hours-row"><span>${esc(h.day)}</span><input type="text" data-h="${i}" value="${esc(h.time)}"></div>`).join('')}</div>
+      </div>
+      <div class="card"><h3>Online booking</h3><p class="desc">The booking system shown on the Book Now page. Every Book Now button on the site leads there.</p>
+        <div class="field"><label class="f" for="cBook">Booking link</label><input type="url" id="cBook" value="${esc(P.bookingUrl)}">
+          <p class="f-hint"><a href="${esc(P.bookingUrl)}" target="_blank" id="bookTest">Test this link</a></p></div>
+      </div>
+      <div class="card"><h3>Health funds &amp; payment options</h3><p class="desc">The logos in the health fund strip. Drag to reorder.</p>
+        <ul class="sortable" id="fundList"></ul>
+        <button class="btn btn-ghost btn-sm" id="addFund" type="button" style="margin-top:12px">+ Add a fund</button>
+      </div>
+    </div>`;
+
+  const mark = () => setDirty(true);
+  $('#cPhone').addEventListener('input', e => { $('#cTel').value = e.target.value.replace(/\D/g, ''); mark(); });
+  ['#cTel', '#cEmail', '#cA1', '#cA2'].forEach(s => $(s).addEventListener('input', mark));
+  $('#cBook').addEventListener('input', e => { $('#bookTest').href = e.target.value; mark(); });
+  $$('[data-h]').forEach(inp => inp.addEventListener('input', () => { P.hours[+inp.dataset.h].time = inp.value; mark(); }));
+
+  const fl = $('#fundList');
+  function renderFunds() {
+    fl.innerHTML = P.funds.map((f, i) => `<li class="fund-li" draggable="true" data-id="${i}">
+      <span class="handle">${ICON.grip}</span>
+      <img src="${esc(logoSrc(f.logo))}" alt="">
+      <input type="text" data-fn="${i}" value="${esc(f.name)}" placeholder="Fund name">
+      <button class="btn btn-ghost btn-sm" data-logo="${i}" type="button">Logo</button>
+      ${moveBtns}
+      <button class="icon-btn" data-rm="${i}" type="button" title="Remove">${ICON.x}</button></li>`).join('');
+    refreshArrows(fl);
+  }
+  renderFunds();
+  makeSortable(fl, () => {
+    const order = $$('li', fl).map(li => +li.dataset.id);
+    P.funds = order.map(i => P.funds[i]);
+    renderFunds(); mark();
+  });
+  fl.addEventListener('input', e => { const i = e.target.dataset.fn; if (i != null) { P.funds[+i].name = e.target.value; mark(); } });
+  fl.addEventListener('click', async e => {
+    const lg = e.target.closest('[data-logo]'), rm = e.target.closest('[data-rm]');
+    if (lg) { const r = await chooseAndUpload(600); if (r) { P.funds[+lg.dataset.logo].logo = r.src; renderFunds(); mark(); } }
+    if (rm) { if (confirm('Remove this fund from the website?')) { P.funds.splice(+rm.dataset.rm, 1); renderFunds(); mark(); } }
+  });
+  $('#addFund').onclick = async () => {
+    const r = await chooseAndUpload(600); if (!r) return;
+    P.funds.push({ name: r.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '), logo: r.src });
+    renderFunds(); mark();
+  };
+
+  $('#saveBtn').onclick = async () => {
+    const out = {
+      phone: $('#cPhone').value.trim(), tel: $('#cTel').value.replace(/\D/g, ''),
+      email: $('#cEmail').value.trim(), address1: $('#cA1').value.trim(), address2: $('#cA2').value.trim(),
+      hours: P.hours, bookingUrl: $('#cBook').value.trim(), funds: P.funds.filter(f => f.logo),
+    };
+    if (!out.phone || !out.tel) { toast('Please enter a phone number', true); return; }
+    if (out.bookingUrl && !/^https?:\/\//.test(out.bookingUrl)) { toast('The booking link must start with https://', true); return; }
+    await A.set('site:practice', out); setDirty(false); toast('Practice details saved');
+  };
+}
+
+/* ================================================== SETTINGS */
+async function viewSettings() {
+  const pages = await A.list('page:');
+  const posts = await getPosts();
+  const practice = await A.get('site:practice');
+  $('#content').innerHTML = `
+    <div class="topbar"><h2>Settings</h2></div>
+    <div class="view">
+      <div class="card"><h3>Storage</h3>
+        <p class="desc">Connected to: <b>${esc(A.mode === 'demo' ? 'Demo storage (this browser only)' : A.mode)}</b></p>
+        <p class="desc" style="margin:0">${pages.length} edited page${pages.length === 1 ? '' : 's'} &middot; ${posts.length} dashboard post${posts.length === 1 ? '' : 's'} &middot; practice details ${practice ? 'customised' : 'unchanged'}</p>
+      </div>
+      ${isDemo ? `<div class="card"><h3>Demo mode</h3>
+        <p class="desc">Everything you change here is kept in this browser only. The live website is not affected, and nobody else can see your edits. Use this to try the dashboard out.</p>
+        <button class="btn btn-danger btn-sm" id="resetAll" type="button">Reset all demo changes</button></div>` : ''}
+    </div>`;
+  const r = $('#resetAll');
+  if (r) r.onclick = async () => {
+    if (!confirm('Wipe every change made in this demo? This cannot be undone.')) return;
+    await A.resetAll(); toast('Demo reset'); route();
+  };
+}
+
+/* ================================================== AUTH + BOOT */
+async function showApp(user) {
+  $('#login').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#whoami').textContent = user.email;
+  if (!PAGES.length) {
+    try { PAGES = await (await fetch('../cms/pages.json', { cache: 'no-cache' })).json(); }
+    catch (e) { PAGES = []; toast('Could not load the page list', true); }
+  }
+  route();
+}
+function showLogin() { $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); $('#lEmail').focus(); }
+
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('#lErr').textContent = '';
+  try { const u = await A.auth.signIn($('#lEmail').value, $('#lPass').value); showApp(u); }
+  catch (err) { $('#lErr').textContent = err.message || 'Sign in failed.'; }
+});
+$('#signOut').onclick = async () => { if (!guard()) return; dirty = false; await A.auth.signOut(); location.hash = ''; showLogin(); };
+
+(async () => {
+  const u = await A.auth.getUser();
+  if (u) showApp(u); else showLogin();
+})();
+})();
+</script>
+</body>
+</html>
